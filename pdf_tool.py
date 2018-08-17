@@ -22,7 +22,7 @@ def split(filename):
         with open(output_filename, 'wb') as out:
             pdf_writer.write(out)
 
-        print('Created: {}'.format(output_filename))
+        print('[+] Created: {}'.format(output_filename))
 
 
 @click.group()
@@ -31,15 +31,16 @@ def pdf_merger():
 
 
 @pdf_merger.command()
-@click.argument('input_paths')
-@click.argument('output', type=click.File('wb'))
-def merge(input_paths, output):
-    paths = glob.glob(input_paths)
+@click.argument('input_path', type=click.Path(exists=True))
+@click.argument('output', default='merged.pdf', type=click.File('wb'))
+def merge(input_path, output):
+    paths = glob.glob('{}/*.pdf'.format(input_path))
     paths.sort()
 
     pdf_merger = PdfFileMerger()
 
     for path in paths:
+        print("[+] Merging {0} into {1}".format(path, output.name))
         pdf_merger.append(path)
 
     pdf_merger.write(output)

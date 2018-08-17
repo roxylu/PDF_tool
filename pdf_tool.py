@@ -9,8 +9,14 @@ def pdf_splitter():
 
 
 @pdf_splitter.command()
-@click.argument('filename', type=click.Path(exists=True))
+@click.argument(
+    'filename',
+    type=click.Path(exists=True),
+)
 def split(filename):
+    """
+    This script splits single PDF files into pages under the same directory.
+    """
     pdf = PdfFileReader(filename)
     for page in range(pdf.getNumPages()):
         pdf_writer = PdfFileWriter()
@@ -31,9 +37,19 @@ def pdf_merger():
 
 
 @pdf_merger.command()
-@click.argument('input_path', type=click.Path(exists=True))
-@click.argument('output', default='merged.pdf', type=click.File('wb'))
+@click.argument(
+    'input_path',
+    type=click.Path(exists=True),
+)
+@click.argument(
+    'output',
+    default='merged.pdf',
+    type=click.File('wb'),
+)
 def merge(input_path, output):
+    """
+    This script merges PDF files in INPUT_PATH into one OUTPUT PDF file.
+    """
     paths = glob.glob('{}/*.pdf'.format(input_path))
     paths.sort()
 
